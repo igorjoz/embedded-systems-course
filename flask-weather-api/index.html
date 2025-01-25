@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
+</head>
+
+<body>
+
+    <span style="color: red; font-weight: 700; font-size: 100px; ">{{v}}</span>
+
+    <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+
+    <a href="/temperature">Temperature</a>
+    <a href="/">Pressure</a>
+    <a href="/weather">Weather</a>
+    <a href="/db">Historic temperature data</a>
+
+    <script>
+        const myChart = new Chart("myChart", {
+            type: "line",
+            data: {
+                labels: {{ l }},
+        datasets: [{
+            backgroundColor: "rgba(0,0,255,0.5W)",
+            borderColor: "rgba(0, 0, 255, 0.1)",
+            data: {{ dl }}
+        }]
+ 
+    },
+        options: { }
+    });
+
+        setTimeout(() => window.location.reload(1), 3000);
+    </script>
+
+</body>
+
+</html>
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
+</head>
+
+<body>
+
+    <span style="color: red; font-weight: 700; font-size: 100px; ">{{v}}</span>
+
+    <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+
+    <a href="/temperature">Temperature</a>
+    <a href="/">Pressure</a>
+    <a href="/weather">Weather</a>
+    <a href="/db">Historic temperature data</a>
+
+
+
+    <script>
+        const myChart = new Chart("myChart", {
+            type: "line",
+            data: {
+                labels: {{ l }},
+        datasets: [{
+            backgroundColor: "rgba(0,0,255,0.5W)",
+            borderColor: "rgba(0, 0, 255, 0.1)",
+            data: {{ dl }}
+        }]
+ 
+    },
+        options: { }
+    });
+
+        setTimeout(() => window.location.reload(1), 3000);
+    </script>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Weather in {{ weather.city }} </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        {% if weather.error %}
+        <h1>Weather app </h1>
+        {% else %}
+        <h1>Weather in {{ weather.city }} </h1>
+        {% endif %}
+
+        {% if weather.error %}
+        <p class="error">{{ weather.error }}</p>
+        {% else %}
+        <p><strong>City:</strong> {{ weather.city }}</p>
+        <p><strong>Temperature:</strong> {{ weather.temperature }} °C</p>
+        <p><strong>Humidity:</strong> {{ weather.humidity }}%</p>
+        <p><strong>Pressure:</strong> {{ weather.pressure }} hPa</p>
+        <p><strong>Condition:</strong> {{ weather.description }}</p>
+        {% endif %}
+
+        <a href="/temperature">Temperature</a>
+        <a href="/">Pressure</a>
+        <a href="/weather">Weather</a>
+        <a href="/db">Historic temperature data</a>
+
+        <form method="POST">
+            <label for="city">Miasto:</label>
+            <input type="text" name="city" id="city" required>
+
+            <input type="submit">
+        </form>
+    </div>
+</body>
+
+</html>
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Weather in {{ weather.city }} </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        {% if weather.error %}
+        <h1>Weather app </h1>
+        {% else %}
+        <h1>Weather in {{ weather.city }} </h1>
+        {% endif %}
+
+        {% if weather.error %}
+        <p class="error">{{ weather.error }}</p>
+        {% else %}
+        <p><strong>City:</strong> {{ weather.city }}</p>
+        <p><strong>Temperature:</strong> {{ weather.temperature }} °C</p>
+        <p><strong>Humidity:</strong> {{ weather.humidity }}%</p>
+        <p><strong>Pressure:</strong> {{ weather.pressure }} hPa</p>
+        <p><strong>Condition:</strong> {{ weather.description }}</p>
+        {% endif %}
+
+        <a href="/temperature">Temperature</a>
+        <a href="/">Pressure</a>
+        <a href="/weather">Weather</a>
+        <a href="/db">Historic temperature data</a>
+
+        <form method="POST">
+            <label for="city">Miasto:</label>
+            <input type="text" name="city" id="city" required>
+
+            <input type="submit">
+        </form>
+    </div>
+</body>
+
+</html>
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+
+<body>
+
+    <span style="color: red; font-weight: 700; font-size: 100px; ">Temperature historic data</span>
+
+    <div>
+        <ol>
+            {% for i in range(temperatures_length) %}
+            <li>
+                {{ temp_data[i] }}
+            </li>
+            {% endfor %}
+        </ol>
+    </div>
+
+    <a href="/temperature">Temperature</a>
+    <a href="/">Pressure</a>
+    <a href="/weather">Weather</a>
+    <a href="/db">Historic temperature data</a>
+
+
+
+
+
+</body>
+
+</html>
