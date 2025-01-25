@@ -1,0 +1,226 @@
+SWITCH_OTHER
+
+import paho.mqtt.client as mqtt
+import time
+
+# def on_log(client, userdata, level, buf):
+#     print("log: ",buf)
+
+flag_connected = 0
+def on_connectN(client, userdata, flags, rc):
+   global flag_connected
+   flag_connected = 1
+   print("Connected with result code "+str(rc))
+
+def on_disconnectN(client, userdata, rc):
+   global flag_connected
+   flag_connected = 0
+   print("Disconnected with result code "+str(rc))
+
+clientN = mqtt.Client()
+clientN.on_connect = on_connectN
+clientN.on_disconnect = on_disconnectN
+#client.on_log=on_log
+clientN.connect("192.168.51.239", 1883, 60)
+clientN.loop_start()
+
+#-----------------------------------------------
+
+def on_connectO(client, userdata, flags, rc):
+    print("Connected with result code "+str(rc))
+    # Subscribing in on_connect() means that if we lose the connection and
+    # reconnect then subscriptions will be renewed.
+    client.subscribe("gpio/#")
+
+# The callback for when a PUBLISH message is received from the server.
+def on_messageO(client, userdata, msg):
+    print(msg.topic+" "+str(msg.payload))
+    clientN.publish("led/504", msg.payload)
+
+clientO = mqtt.Client()
+clientO.on_connect = on_connectO
+clientO.on_message = on_messageO
+clientO.connect("localhost", 1883, 60)
+
+# Blocking call that processes network traffic, dispatches callbacks and
+# handles reconnecting.
+# Other loop*() functions are available that give a threaded interface and a
+# manual interface.
+clientO.loop_forever()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SWITCH LED
+
+import paho.mqtt.client as mqtt
+import time
+
+# def on_log(client, userdata, level, buf):
+#     print("log: ",buf)
+
+flag_connected = 0
+def on_connectN(client, userdata, flags, rc):
+   global flag_connected
+   flag_connected = 1
+   print("Connected with result code "+str(rc))
+
+def on_disconnectN(client, userdata, rc):
+   global flag_connected
+   flag_connected = 0
+   print("Disconnected with result code "+str(rc))
+
+clientN = mqtt.Client()
+clientN.on_connect = on_connectN
+clientN.on_disconnect = on_disconnectN
+#client.on_log=on_log
+clientN.connect("localhost", 1883, 60)
+clientN.loop_start()
+
+#-----------------------------------------------
+
+def on_connectO(client, userdata, flags, rc):
+    print("Connected with result code "+str(rc))
+    # Subscribing in on_connect() means that if we lose the connection and
+    # reconnect then subscriptions will be renewed.
+    client.subscribe("gpio/#")
+
+# The callback for when a PUBLISH message is received from the server.
+def on_messageO(client, userdata, msg):
+    print(msg.topic+" "+str(msg.payload))
+    clientN.publish("led/504", msg.payload)
+
+clientO = mqtt.Client()
+clientO.on_connect = on_connectO
+clientO.on_message = on_messageO
+clientO.connect("localhost", 1883, 60)
+
+# Blocking call that processes network traffic, dispatches callbacks and
+# handles reconnecting.
+# Other loop*() functions are available that give a threaded interface and a
+# manual interface.
+clientO.loop_forever()
+
+
+
+
+
+MAIN
+
+#!/usr/bin/env python3.6
+import time
+import gpio
+print( "Test LED@PWM0\n")
+gpio.setup(504, gpio.OUT)
+
+gpio.setup(488, gpio.IN)
+
+isOn = False
+gpio.set(504, 0)
+time.sleep(0.5)
+
+# gpio.log.setLevel(logging.INFO)
+while(True):
+    if isOn != gpio.read(488):
+        isOn = not isOn
+        print(isOn)
+        gpio.set(504, isOn)
+    time.sleep(0.5)
+    
+
+
+
+
+
+
+LED
+
+import paho.mqtt.client as mqtt
+import gpio
+# The callback for when the client receives a CONNACK response from the server.
+
+gpio.setup(504, gpio.OUT)
+
+def on_connect(client, userdata, flags, rc):
+    print("Connected with result code "+str(rc))
+    # Subscribing in on_connect() means that if we lose the connection and
+    # reconnect then subscriptions will be renewed.
+    client.subscribe("led/#")
+
+# The callback for when a PUBLISH message is received from the server.
+def on_message(client, userdata, msg):
+    print(msg.topic+" "+str(msg.payload))
+    gpio.set(504, int(msg.payload))
+
+
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
+client.connect("localhost", 1883, 60)
+
+# Blocking call that processes network traffic, dispatches callbacks and
+# handles reconnecting.
+# Other loop*() functions are available that give a threaded interface and a
+# manual interface.
+client.loop_forever()
+
+
+
+
+
+
+BUTTON
+
+import paho.mqtt.client as mqtt
+import time
+import gpio
+
+# def on_log(client, userdata, level, buf):
+#     print("log: ",buf)
+
+gpio.setup(488, gpio.IN)
+
+flag_connected = 0
+def on_connect(client, userdata, flags, rc):
+   global flag_connected
+   flag_connected = 1
+   print("Connected with result code "+str(rc))
+
+def on_disconnect(client, userdata, rc):
+   global flag_connected
+   flag_connected = 0
+   print("Disconnected with result code "+str(rc))
+
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_disconnect = on_disconnect
+#client.on_log=on_log
+client.connect("localhost", 1883, 60)
+client.loop_start()
+
+while(True):
+    if flag_connected == 1:
+        # Publish message
+        client.publish("gpio/488", gpio.read(488))
+        time.sleep(1)
+        # client.publish("led/504", "0")
+        # time.sleep(1)
+    else:
+        # Wait to reconnect
+        time.sleep(5)
+        client.reconnect()
+
+
+
+
