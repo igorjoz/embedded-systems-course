@@ -40,7 +40,7 @@ osrs_p = 2
 mode = 1
  
 # OpenWeatherMap API key
-API_KEY = "a5e449f2f406f9c0ec11477736c36ea6"
+API_KEY = "PUT_YOUR_API_KEY_HERE"
 CITY = "Gdansk"
 URL = f"http://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}&units=metric"
  
